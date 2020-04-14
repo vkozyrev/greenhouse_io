@@ -3,7 +3,7 @@ module GreenhouseIo
     include HTTMultiParty
     include GreenhouseIo::API
 
-    PERMITTED_OPTIONS = [:page, :per_page, :job_id]
+    PERMITTED_OPTIONS = %i[page per_page job_id email status].freeze
 
     attr_accessor :api_token, :rate_limit, :rate_limit_remaining, :link
     base_uri 'https://harvest.greenhouse.io/v1'
@@ -30,6 +30,22 @@ module GreenhouseIo
 
     def activity_feed(id, options = {})
       get_from_harvest_api "/candidates/#{id}/activity_feed", options
+    end
+
+    def create_candidate(candidate_hash, on_behalf_of)
+      post_to_harvest_api(
+        '/candidates',
+        candidate_hash,
+        'On-Behalf-Of' => on_behalf_of.to_s
+      )
+    end
+
+    def create_prospect(candidate_hash, on_behalf_of)
+      post_to_harvest_api(
+        '/prospects',
+        candidate_hash,
+        'On-Behalf-Of' => on_behalf_of.to_s
+      )
     end
 
     def create_candidate_note(candidate_id, note_hash, on_behalf_of)
