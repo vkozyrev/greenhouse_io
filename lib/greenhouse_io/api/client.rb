@@ -56,6 +56,14 @@ module GreenhouseIo
       )
     end
 
+    def create_candidate_attachment(candidate_id, attachment_hash, on_behalf_of)
+      post_to_harvest_api(
+        "/candidates/#{candidate_id}/attachments",
+        attachment_hash,
+        { 'On-Behalf-Of' => on_behalf_of.to_s }
+      )
+    end
+
     def create_application(candidate_id, application_hash, on_behalf_of)
       post_to_harvest_api(
         "/candidates/#{candidate_id}/applications",
